@@ -1,0 +1,82 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Edit Employee</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top"><h1>Edit Employee</h1></header>
+  <main class="container">
+    <div class="card">
+      <form id="editForm">
+        <div class="input-row">
+          <input id="id" type="number" placeholder="ID (integer)" required readonly>
+          <input id="firstname" type="text" placeholder="First name" required>
+        </div>
+        <div class="input-row">
+          <input id="lastname" type="text" placeholder="Last name" required>
+          <input id="email" type="email" placeholder="Email" required>
+        </div>
+        <div style="display:flex;gap:10px;margin-top:6px">
+          <button type="submit">Update employee</button>
+          <a class="btn" href="employees.html">Back to list</a>
+        </div>
+      </form>
+      <p id="msg" style="margin-top:10px"></p>
+    </div>
+  </main>
+
+<script>
+function qParam(name){ return new URLSearchParams(location.search).get(name); }
+const id = qParam('id');
+if (!id) {
+  document.getElementById('msg').textContent = 'No id specified in URL.';
+} else {
+  // load data
+  (async ()=>{
+    try {
+      const res = await fetch('/api/employee/' + id);
+      if (!res.ok) throw new Error('Not found');
+      const emp = await res.json();
+      document.getElementById('id').value = emp.id || '';
+      document.getElementById('firstname').value = emp.firstname || '';
+      document.getElementById('lastname').value = emp.lastname || '';
+      document.getElementById('email').value = emp.email || '';
+    } catch(err){
+      document.getElementById('msg').textContent = 'Load error: ' + err.message;
+    }
+  })();
+}
+
+document.getElementById('editForm').addEventListener('submit', async (e)=>{
+  e.preventDefault();
+  const payload = {
+    id: parseInt(document.getElementById('id').value),
+    firstname: document.getElementById('firstname').value.trim(),
+    lastname: document.getElementById('lastname').value.trim(),
+    email: document.getElementById('email').value.trim()
+  };
+  try {
+    const res = await fetch('/api/employee/' + payload.id, {
+      method: 'PUT',
+      headers: {'Content-Type': 'application/json'},
+      body: JSON.stringify(payload)
+    });
+    if (res.ok) {
+      document.getElementById('msg').textContent = 'Updated successfully ✅';
+      document.getElementById('msg').style.color = 'green';
+    } else {
+      const txt = await res.text();
+      document.getElementById('msg').textContent = 'Update failed: ' + (txt || res.statusText);
+      document.getElementById('msg').style.color = 'crimson';
+    }
+  } catch(err){
+    document.getElementById('msg').textContent = 'Network error: ' + err.message;
+  }
+});
+</script>
+</body>
+</html>

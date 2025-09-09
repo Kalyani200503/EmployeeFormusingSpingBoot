@@ -1,0 +1,27 @@
+/* Simple clean styles tailored to the project */
+:root{--bg:#f7f8fb;--card:#ffffff;--accent:#2b7cff;--muted:#6b6f76}
+*{box-sizing:border-box}
+body{margin:0;font-family:Inter,Segoe UI,Helvetica,Arial,sans-serif;background:var(--bg);color:#222}
+.top{background:linear-gradient(90deg, #f6f8ff, #ffffff);padding:26px 16px;text-align:center;border-bottom:1px solid #e6e9ef}
+.top h1{margin:0;font-size:26px}
+.container{max-width:980px;margin:26px auto;padding:0 16px}
+.card{background:var(--card);padding:18px;border-radius:10px;box-shadow:0 6px 18px rgba(28,40,80,0.06);margin-bottom:18px}
+.actions{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.btn{display:inline-block;padding:10px 14px;border-radius:8px;text-decoration:none;background:var(--accent);color:white;font-weight:600}
+.muted{color:var(--muted);margin-top:6px}
+
+/* Table */
+table{width:100%;border-collapse:collapse}
+th,td{padding:10px;border-bottom:1px solid #eef1f6;text-align:left}
+th{background:#fbfdff;font-weight:700}
+
+/* Form */
+form{max-width:720px;margin:8px auto;display:flex;flex-direction:column;gap:10px}
+.input-row{display:flex;gap:10px;flex-wrap:wrap}
+.input-row input{flex:1;padding:10px;border-radius:8px;border:1px solid #dde4f0}
+input[type="number"]{-moz-appearance:textfield}
+button[type="submit"]{padding:10px 14px;border-radius:8px;border:0;background:#1f6feb;color:white;font-weight:700;cursor:pointer}
+
+/* small screens */
+@media (max-width:600px){.input-row{flex-direction:column}}
+.footer{text-align:center;padding:18px;color:#8b8f97;font-size:13px}

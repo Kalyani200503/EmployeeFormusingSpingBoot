@@ -1,0 +1,48 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Delete Employee</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top"><h1>Delete Employee</h1></header>
+  <main class="container">
+    <div class="card">
+      <h3>Enter Employee ID to Delete</h3>
+      <form id="deleteForm">
+        <label for="empId">Employee ID:</label>
+        <input type="number" id="empId" name="empId" required>
+        <button type="submit" class="btn" style="background:#ff6b6b">Delete</button>
+      </form>
+      <p id="msg"></p>
+      <p><a class="btn" href="employees.html">⬅ Back to Employees</a></p>
+    </div>
+  </main>
+
+  <script>
+    const form = document.getElementById('deleteForm');
+    const msg = document.getElementById('msg');
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const id = document.getElementById('empId').value.trim();
+      if (!id) return;
+
+      msg.textContent = "Deleting...";
+      try {
+        const res = await fetch(`/api/employee/${id}`, { method: 'DELETE' });
+        if (res.ok) {
+          msg.textContent = "✅ Employee deleted successfully.";
+        } else {
+          const text = await res.text();
+          msg.textContent = "❌ Failed: " + (text || res.statusText);
+        }
+      } catch (err) {
+        msg.textContent = "⚠ Network error: " + err.message;
+      }
+    });
+  </script>
+</body>
+</html>

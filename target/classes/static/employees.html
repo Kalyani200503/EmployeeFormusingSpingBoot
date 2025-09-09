@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Employees</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top"><h1>Employees</h1></header>
+  <main class="container">
+    <div class="card">
+      <div style="display:flex;justify-content:space-between;align-items:center">
+        <h3>Employee List</h3>
+        <a class="btn" href="add-employee.html">➕ Add New</a>
+      </div>
+      <table id="tbl">
+        <thead>
+          <tr>
+            <th>ID</th><th>First name</th><th>Last name</th><th>Email</th><th>Actions</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+  </main>
+
+<script>
+async function loadEmployees() {
+  const tbody = document.getElementById('tbody');
+  tbody.innerHTML = '<tr><td colspan="5">Loading…</td></tr>';
+
+  try {
+    const res = await fetch('/api/employee'); // ✅ correct endpoint
+    if (!res.ok) throw new Error(res.status + ' ' + res.statusText);
+
+    const data = await res.json();
+
+    if (!Array.isArray(data) || data.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="5">No employees found</td></tr>';
+      return;
+    }
+
+    tbody.innerHTML = '';
+    data.forEach(emp => {
+      const tr = document.createElement('tr');
+      tr.innerHTML = `
+        <td>${emp.id ?? ''}</td>
+        <td>${emp.firstname ?? ''}</td>
+        <td>${emp.lastname ?? ''}</td>
+        <td>${emp.email ?? ''}</td>
+        <td style="white-space:nowrap">
+          <a class="btn" href="edit-employee.html?id=${emp.id}">Edit</a>
+          <button data-id="${emp.id}" class="deleteBtn" style="margin-left:8px;background:#ff6b6b">Delete</button>
+        </td>`;
+      tbody.appendChild(tr);
+    });
+
+    // attach delete handlers
+    document.querySelectorAll('.deleteBtn').forEach(b =>
+      b.addEventListener('click', onDelete)
+    );
+
+  } catch (err) {
+    tbody.innerHTML = `<tr><td colspan="5">Error loading: ${err.message}</td></tr>`;
+  }
+}
+
+async function onDelete(e) {
+  const id = e.currentTarget.dataset.id;
+  if (!confirm('Delete employee with id ' + id + '?')) return;
+
+  try {
+    const res = await fetch('/api/employee/' + id, { method: 'DELETE' });
+    if (res.ok) {
+      alert('Deleted ✅');
+      loadEmployees();
+    } else {
+      const txt = await res.text();
+      alert('Delete failed: ' + (txt || res.statusText));
+    }
+  } catch (err) {
+    alert('Network error: ' + err.message);
+  }
+}
+
+// Load on page open
+loadEmployees();
+</script>
+</body>
+</html>

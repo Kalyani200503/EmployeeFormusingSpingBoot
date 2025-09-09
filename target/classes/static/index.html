@@ -1,0 +1,34 @@
+
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Employee Management — Home</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <header class="top">
+    <h1>Employee Management System</h1>
+    <p class="muted">Simple frontend (HTML/CSS/JS) that integrates with the project's REST API</p>
+  </header>
+
+  <main class="container">
+    <div class="card">
+      <h2>Quick actions</h2>
+      <div class="actions">
+        <a class="btn" href="add-employee.html">➕ Add Employee</a>
+        <a class="btn" href="employees.html">📋 View Employees</a>
+      </div>
+    </div>
+
+    <div class="card about">
+      <h3>Note</h3>
+      <p>This frontend calls the backend endpoints at <code>/api/employee</code>. Make sure your Spring Boot app is running.<br>
+      Fields used: <strong>id, firstname, lastname, email</strong>.</p>
+    </div>
+  </main>
+
+  <footer class="footer">Built for your project — auto-generated to match DTO & API</footer>
+</body>
+</html>
